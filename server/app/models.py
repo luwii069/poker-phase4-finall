@@ -24,3 +24,5 @@ class Game(db.Model):
     table_card = db.Column(db.PickleType, nullable=False)
     player_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=False)
     computer_id = db.Column(db.Integer, db.ForeignKey('player.id'), nullable=False)
+
+    ##
