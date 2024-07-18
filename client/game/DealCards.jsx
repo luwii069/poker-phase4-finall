@@ -18,6 +18,7 @@ function DealCards() {
     })
     .then(res => {
       const { player_hand, computer_hand, table_card } = res.data; 
+
       setPlayerHand(player_hand);
       setComputerHand(computer_hand);
       setTableCards(table_card);
@@ -38,10 +39,10 @@ function DealCards() {
         headers:{
           "Authorization": `Bearer ${token}`
         }
-    
 
-      }).then(
-        function(res){
+      }).then( res =>{
+
+       
           console.log(res.data);
           console.log(tableCards);
           if (res.data.valid) {
@@ -52,22 +53,27 @@ function DealCards() {
             setTableCards(prevTableCards => 
               prevTableCards.concat([[rank, suit]])
             );
-            const { computer_hand, table_card } = res.data.computer_moves;
+            const { computer_hand, table_card, new_player_hand } = res.data.computer_moves;
               setComputerHand(computer_hand)
               setTableCards(table_card)
+
+              setPlayerHand(prevTableCards => 
+                prevTableCards.concat(new_player_hand)
+              );
+            
+             
+
           }
+
+
           else{
             console.log("Invalid move");
         }
-         
-        if (res.data.penalty && res.data.penalty.length > 0) {
-          setComputerHand(prevHand=>
-            prevHand.concat(res.data.penalty)
-            
-          )
-          }
-       
+        
+      
         }
+
+        
       )
       .catch(err =>{
         console.log("err", err.message);
@@ -75,9 +81,12 @@ function DealCards() {
 
       
     }
+
+
   return (
     <div>
       <h3>Player's Hand</h3>
+
       <div>
         {playerHand.map((card, index) => (
           <img
